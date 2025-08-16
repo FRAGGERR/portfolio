@@ -1,6 +1,6 @@
 {
-  "buildCommand": "npm run build",
+  "installCommand": "yarn install",
+  "buildCommand": "yarn build",
   "outputDirectory": "public",
-  "framework": "gatsby",
-  "installCommand": "npm install"
+  "framework": "gatsby"
 }
