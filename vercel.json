@@ -2,10 +2,5 @@
   "buildCommand": "npm run build",
   "outputDirectory": "public",
   "framework": "gatsby",
-  "installCommand": "npm install",
-  "functions": {
-    "gatsby-node.js": {
-      "runtime": "nodejs18.x"
-    }
-  }
+  "installCommand": "npm install"
 }
