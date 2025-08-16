@@ -125,7 +125,16 @@ const About = () => {
     sr.reveal(revealContainer.current, srConfig());
   }, []);
 
-  const skills = ['JavaScript (ES6+)', 'TypeScript', 'React', 'Eleventy', 'Node.js', 'WordPress'];
+  const skills = [
+    'Python',
+    'Deep Learning',
+    'Transformers',
+    'Web Technologies',
+    'AWS',
+    'Docker',
+    'Git',
+    'Linux',
+  ];
 
   return (
     <StyledAboutSection id="about" ref={revealContainer}>
@@ -135,33 +144,50 @@ const About = () => {
         <StyledText>
           <div>
             <p>
-              Hello! My name is Brittany and I enjoy creating things that live on the internet. My
-              interest in web development started back in 2012 when I decided to try editing custom
-              Tumblr themes — turns out hacking together a custom reblog button taught me a lot
-              about HTML &amp; CSS!
+              <span style={{ display: 'block', textAlign: 'justify' }}>
+                I’m Hardik Chhipa, and I like my AI like I like my coffee—strong, efficient, and
+                adaptable anywhere. From crafting multilingual chatbots that erase language walls in
+                healthcare, to engineering retinal disease detection models that fit comfortably on
+                resource-constrained devices, I’m driven by a simple principle. If technology can’t
+                reach everyone, it’s not finished yet.
+              </span>
             </p>
 
             <p>
-              Fast-forward to today, and I’ve had the privilege of working at{' '}
-              <a href="https://us.mullenlowe.com/">an advertising agency</a>,{' '}
-              <a href="https://starry.com/">a start-up</a>,{' '}
-              <a href="https://www.apple.com/">a huge corporation</a>, and{' '}
-              <a href="https://scout.camd.northeastern.edu/">a student-led design studio</a>. My
-              main focus these days is building accessible, inclusive products and digital
-              experiences at <a href="https://upstatement.com/">Upstatement</a> for a variety of
-              clients.
+              <span style={{ display: 'block', textAlign: 'justify' }}>
+                Fast-forward to today, and I've had the privilege of working at{' '}
+                <a
+                  href="https://drive.google.com/file/d/1B-LrY_kBV2SAux9gX5NQpJrxLVALmRGu/view?usp=sharing"
+                  style={{ color: 'var(--green)' }}>
+                  IIT Jodhpur
+                </a>
+                ,{' '}
+                <a
+                  href="https://www.srmist.edu.in/department/department-of-computational-intelligence/student-clubs-professional-chapters-and-association-bodies/"
+                  style={{ color: 'var(--green)' }}>
+                  SRM IET
+                </a>
+                , and{' '}
+                <a
+                  href="https://www.srmist.edu.in/department/center-of-excellence-for-electronic-cooling-and-cfd-simulation/"
+                  style={{ color: 'var(--green)' }}>
+                  Intel Cooling Lab
+                </a>
+                . My main focus these days is building speech recognition and voice cloning
+                pipelines at{' '}
+                <a href="https://www.naventra.in/" style={{ color: 'var(--green)' }}>
+                  Naventra
+                </a>{' '}
+                for a variety of clients.
+              </span>
             </p>
 
             <p>
-              I also recently{' '}
-              <a href="https://www.newline.co/courses/build-a-spotify-connected-app">
-                launched a course
-              </a>{' '}
-              that covers everything you need to build a web app with the Spotify API using Node
-              &amp; React.
+              I also recently <a href="https://clearsight.streamlit.app/">launched a project</a>{' '}
+              that helps to detect retinal diseases from fundus images.
             </p>
 
-            <p>Here are a few technologies I’ve been working with recently:</p>
+            <p>Here are a few technologies I've been working with recently:</p>
           </div>
 
           <ul className="skills-list">
