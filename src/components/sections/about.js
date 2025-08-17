@@ -160,21 +160,14 @@ const About = () => {
                   href="https://drive.google.com/file/d/1B-LrY_kBV2SAux9gX5NQpJrxLVALmRGu/view?usp=sharing"
                   style={{ color: 'var(--green)' }}>
                   IIT Jodhpur
-                </a>
-                ,{' '}
-                <a
-                  href="https://www.srmist.edu.in/department/department-of-computational-intelligence/student-clubs-professional-chapters-and-association-bodies/"
-                  style={{ color: 'var(--green)' }}>
-                  SRM IET
-                </a>
-                , and{' '}
+                </a>{' '}
+                and{' '}
                 <a
                   href="https://www.srmist.edu.in/department/center-of-excellence-for-electronic-cooling-and-cfd-simulation/"
                   style={{ color: 'var(--green)' }}>
                   Intel Cooling Lab
                 </a>
-                . My main focus these days is building speech recognition and voice cloning
-                pipelines at{' '}
+                . Nowadays I work on building speech recognition and voice cloning pipelines at{' '}
                 <a href="https://www.naventra.in/" style={{ color: 'var(--green)' }}>
                   Naventra
                 </a>{' '}

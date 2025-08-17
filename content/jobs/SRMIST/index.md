@@ -1,6 +1,6 @@
 ---
 date: '2023-05-10'
-title: 'Deep Learning Eng.'
+title: 'Founder'
 company: 'ClearSight.AI'
 location: 'Chennai, TN'
 range: 'May 2023 - March 2025'

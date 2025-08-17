@@ -31,7 +31,7 @@ module.exports = {
         icon: 'src/images/logo.png',
       },
     },
-    // `gatsby-plugin-offline`, // Temporarily disabled due to compatibility issues
+    `gatsby-plugin-offline`,
     {
       resolve: `gatsby-source-filesystem`,
       options: {
