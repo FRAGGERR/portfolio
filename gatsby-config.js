@@ -4,10 +4,12 @@ module.exports = {
   siteMetadata: {
     title: 'Hardik Chhipa',
     description:
-      'Hardik Chhipa design AI systems that are light on resources, fluent across languages, and focused on widening access to technology in healthcare.',
+      'Hardik Chhipa is an AI engineer and developer who specializes in building AI systems that are light on resources, fluent across languages, and focused on widening access to technology in healthcare.',
     siteUrl: 'https://hardikchhipa.vercel.app', // No trailing slash allowed!
     image: '/og.png', // Path to your image you placed in the 'static' folder
     twitterUsername: '@hardikchhipa',
+    author: 'Hardik Chhipa',
+    siteName: 'Hardik Chhipa Portfolio',
   },
   plugins: [
     `gatsby-plugin-react-helmet`,
@@ -29,7 +31,7 @@ module.exports = {
         icon: 'src/images/logo.png',
       },
     },
-    `gatsby-plugin-offline`,
+    // `gatsby-plugin-offline`, // Temporarily disabled due to compatibility issues
     {
       resolve: `gatsby-source-filesystem`,
       options: {
