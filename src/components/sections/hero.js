@@ -60,15 +60,13 @@ const Hero = () => {
   }, []);
 
   const one = <h1>Hi, my name is</h1>;
-  const two = <h2 className="big-heading">Hardik Chhipa.</h2>;
+  const two = <h2 className="big-heading">Hardik.</h2>;
   const three = <h3 className="big-heading">I build intelligent systems from raw data.</h3>;
   const four = (
     <>
       <p>
-        I'm a data scientist who designs AI systems that are light on resources, fluent across
-        languages, and focused on widening
-        <br />
-        access to technology in healthcare and beyond at{' '}
+        I design AI systems that are light on resources, fluent across languages, and focused on
+        widening access to technology in healthcare and beyond at{' '}
         <a href="https://www.naventra.in/" target="_blank" rel="noreferrer">
           Naventra
         </a>
