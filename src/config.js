@@ -19,8 +19,8 @@ module.exports = {
       url: 'https://www.instagram.com/hardikchhipa28/',
     },
     {
-      name: 'Codepen',
-      url: 'https://codepen.io/hardikchhipa28',
+      name: 'CodeChef',
+      url: 'https://www.codechef.com/users/srmsci_113',
     },
   ],
 
