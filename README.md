@@ -66,6 +66,22 @@ Yes, you can fork this repo. Please give me proper credit by linking back to [br
 | White          | ![#e6f1ff](https://via.placeholder.com/10/e6f1ff?text=+) `#e6f1ff` |
 | Green          | ![#64ffda](https://via.placeholder.com/10/64ffda?text=+) `#64ffda` |
 
+## 🛠️ Tech Stack
+
+| Layer        | Tools/Frameworks                                                                 |
+| ------------ | -------------------------------------------------------------------------------- |
+| **Framework** | Gatsby v3 + React 17 (Static Site Generation)                                   |
+| **Language**  | JavaScript (ESNext via Babel)                                                   |
+| **Styling**   | styled-components with theme, custom fonts                                      |
+| **Content**   | Markdown via Remark + GraphQL data layer                                        |
+| **Media**     | Sharp pipeline, PrismJS code highlighting                                       |
+| **UX**        | ScrollReveal, animejs, React Transition Group, reduced-motion support           |
+| **SEO/PWA**   | react-helmet, sitemap, robots.txt, manifest, offline SW                         |
+| **Analytics** | GA4 via gtag                                                                    |
+| **Hosting**   | Vercel (CDN edge, static output)                                                |
+| **DX/Quality**| ESLint, Prettier, Husky, lint-staged, Babel                                     |
+
+
 
 ## 💡 **Credit:** Inspired by [bchiang7](https://github.com/bchiang7)
 
