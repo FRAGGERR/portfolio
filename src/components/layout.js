@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import styled, { ThemeProvider } from 'styled-components';
+import PropTypes from 'prop-types';
 import { Head, Loader, Nav, Social, Email, Footer } from '@components';
 import { GlobalStyle, theme } from '@styles';
 
