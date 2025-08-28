@@ -62,8 +62,12 @@ const Hero = () => {
 
   // Inject Cal.com element-click embed once for "Get In Touch"
   useEffect(() => {
-    if (typeof window === 'undefined') {return;}
-    if (window.__calElementClickInjected) {return;}
+    if (typeof window === 'undefined') {
+      return;
+    }
+    if (window.__calElementClickInjected) {
+      return;
+    }
     window.__calElementClickInjected = true;
 
     const script = document.createElement('script');
@@ -71,7 +75,7 @@ const Hero = () => {
     script.innerHTML = `
       (function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; if(typeof namespace === "string"){cal.ns[namespace] = cal.ns[namespace] || api;p(cal.ns[namespace], ar);p(cal, ["initNamespace", namespace]);} else p(cal, ar); return;} p(cal, ar); }; })(window, "https://app.cal.com/embed/embed.js", "init");
       Cal("init", "30min", {origin:"https://app.cal.com"});
-      Cal.ns["30min"]("ui", {"hideEventTypeDetails":false,"layout":"month_view"});
+      Cal.ns["30min"]("ui", {"theme":"dark","cssVarsPerTheme":{"dark":{"cal-brand":"#0a192e","cal-brand-primary":"#0a192e","cal-brand-accent":"#64ffda","cal-brand-em":"#64ffda","cal-brand-text":"#ffffff","cal-brand-subtle":"#8892b0"},"light":{"cal-brand":"#cbd5f5","cal-brand-primary":"#cbd5f5","cal-brand-accent":"#0a192e","cal-brand-em":"#0a192e","cal-brand-text":"#0a192e","cal-brand-subtle":"#0a192e"}},"hideEventTypeDetails":false,"layout":"month_view"});
     `;
     document.head.appendChild(script);
   }, []);
@@ -84,7 +88,7 @@ const Hero = () => {
       <p>
         I design AI systems that are light on resources, fluent across languages, and focused on
         widening access to technology in healthcare and beyond at{' '}
-        <a href="https://www.naventra.in/" target="_blank" rel="noreferrer">
+        <a href="https://www.naventra.in/" target="_blank" rel="noopener noreferrer">
           Naventra
         </a>
         .
@@ -97,7 +101,7 @@ const Hero = () => {
       type="button"
       data-cal-link="hardikchhipa/30min"
       data-cal-namespace="30min"
-      data-cal-config='{"layout":"month_view"}'>
+      data-cal-config='{"layout":"month_view","theme":"dark"}'>
       Book a Call
     </button>
   );

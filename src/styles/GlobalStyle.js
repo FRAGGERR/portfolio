@@ -446,6 +446,86 @@ const GlobalStyle = createGlobalStyle`
   ${TransitionStyles};
 
   ${PrismStyles};
+
+  /* Custom Cursor Styling - Ultra Aggressive */
+  html, body {
+    cursor: none !important;
+  }
+  
+  /* Hide default cursor on all interactive elements */
+  a, button, input, textarea, select, [role="button"], [tabindex], label, div, span, p, h1, h2, h3, h4, h5, h6 {
+    cursor: none !important;
+  }
+
+  /* Force hide cursor on any element that might show it */
+  * {
+    cursor: none !important;
+  }
+
+  /* Ensure cursor is hidden even with browser overrides */
+  html {
+    cursor: none !important;
+  }
+
+  /* Additional tab switching protection */
+  body:focus-within {
+    cursor: none !important;
+  }
+
+  /* Force cursor hiding on any focus state */
+  *:focus {
+    cursor: none !important;
+  }
+
+  /* Prevent cursor from showing during transitions */
+  *:hover {
+    cursor: none !important;
+  }
+
+  /* Override any browser default cursor behaviors */
+  *::before, *::after {
+    cursor: none !important;
+  }
+
+  /* Ultra aggressive cursor hiding */
+  *:active, *:visited, *:link {
+    cursor: none !important;
+  }
+
+  /* Force cursor hiding on any pseudo-class */
+  *:first-child, *:last-child, *:nth-child(n) {
+    cursor: none !important;
+  }
+
+  /* Override any inline styles */
+  [style*="cursor"] {
+    cursor: none !important;
+  }
+
+  /* Cal.com Custom Styling */
+  [data-cal-link] {
+    cursor: none;
+  }
+
+  /* Override Cal.com default colors with custom branding */
+  .cal-embed {
+    --cal-brand: #0a192e !important;
+    --cal-brand-primary: #0a192e !important;
+    --cal-brand-accent: #64ffda !important;
+    --cal-brand-em: #64ffda !important;
+    --cal-brand-text: #ffffff !important;
+    --cal-brand-subtle: #8892b0 !important;
+  }
+
+  /* Dark theme overrides */
+  [data-theme="dark"] .cal-embed {
+    --cal-brand: #0a192e !important;
+    --cal-brand-primary: #0a192e !important;
+    --cal-brand-accent: #64ffda !important;
+    --cal-brand-em: #64ffda !important;
+    --cal-brand-text: #ffffff !important;
+    --cal-brand-subtle: #8892b0 !important;
+  }
 `;
 
 export default GlobalStyle;
