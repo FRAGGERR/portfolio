@@ -732,15 +732,25 @@ const PostTemplate = ({ data, location }) => {
   // Generate table of contents from headings
   const generateTableOfContents = () => {
     const headings = [];
+
+    // Check if we're in browser environment
+    if (typeof window === 'undefined' || typeof document === 'undefined') {
+      return headings;
+    }
+
     // Only select headings from the main article content, not from navigation or sidebar
     const articleContent = document.querySelector('.post-content');
-    if (!articleContent) {return headings;}
+    if (!articleContent) {
+      return headings;
+    }
 
     const headingElements = articleContent.querySelectorAll('h1, h2, h3');
 
     headingElements.forEach((heading, index) => {
       // Skip if heading is empty or contains only whitespace
-      if (!heading.textContent || heading.textContent.trim() === '') {return;}
+      if (!heading.textContent || heading.textContent.trim() === '') {
+        return;
+      }
 
       const id = `heading-${index}`;
       heading.id = id;
@@ -758,12 +768,21 @@ const PostTemplate = ({ data, location }) => {
 
   // Track active section on scroll
   useEffect(() => {
+    // Check if we're in browser environment
+    if (typeof window === 'undefined' || typeof document === 'undefined') {
+      return;
+    }
+
     const handleScroll = () => {
       const articleContent = document.querySelector('.post-content');
-      if (!articleContent) {return;}
+      if (!articleContent) {
+        return;
+      }
 
       const headings = articleContent.querySelectorAll('h1, h2, h3');
-      if (headings.length === 0) {return;}
+      if (headings.length === 0) {
+        return;
+      }
 
       const scrollPosition = window.scrollY + 150; // Increased offset for better detection
       let currentSection = '';
@@ -796,6 +815,11 @@ const PostTemplate = ({ data, location }) => {
 
   // Generate TOC after component mounts and content is loaded
   useEffect(() => {
+    // Check if we're in browser environment
+    if (typeof window === 'undefined' || typeof document === 'undefined') {
+      return;
+    }
+
     // Wait for content to be rendered
     const timer = setTimeout(() => {
       generateTableOfContents();
@@ -806,8 +830,15 @@ const PostTemplate = ({ data, location }) => {
 
   // Find heading by topic name
   const findHeadingByTopic = topicName => {
+    // Check if we're in browser environment
+    if (typeof window === 'undefined' || typeof document === 'undefined') {
+      return null;
+    }
+
     const articleContent = document.querySelector('.post-content');
-    if (!articleContent) {return null;}
+    if (!articleContent) {
+      return null;
+    }
 
     const headings = articleContent.querySelectorAll('h1, h2, h3');
 
@@ -826,6 +857,11 @@ const PostTemplate = ({ data, location }) => {
 
   // Handle topic click
   const handleTopicClick = topicName => {
+    // Check if we're in browser environment
+    if (typeof window === 'undefined') {
+      return;
+    }
+
     const targetHeading = findHeadingByTopic(topicName);
     if (targetHeading) {
       const offset = 120; // Account for navigation bar height
@@ -852,18 +888,29 @@ const PostTemplate = ({ data, location }) => {
   };
 
   const renderTableOfContents = () => {
+    // Check if we're in browser environment
+    if (typeof window === 'undefined' || typeof document === 'undefined') {
+      return [];
+    }
+
     const articleContent = document.querySelector('.post-content');
-    if (!articleContent) {return [];}
+    if (!articleContent) {
+      return [];
+    }
 
     const headings = articleContent.querySelectorAll('h1, h2, h3');
-    if (headings.length === 0) {return [];}
+    if (headings.length === 0) {
+      return [];
+    }
 
     const tocItems = [];
     let headingIndex = 0;
 
     headings.forEach(heading => {
       // Skip if heading is empty or contains only whitespace
-      if (!heading.textContent || heading.textContent.trim() === '') {return;}
+      if (!heading.textContent || heading.textContent.trim() === '') {
+        return;
+      }
 
       const id = heading.id || `heading-${headingIndex}`;
       const level = parseInt(heading.tagName.charAt(1));
@@ -902,7 +949,9 @@ const PostTemplate = ({ data, location }) => {
 
   const handleCommentSubmit = e => {
     e.preventDefault();
-    if (!commentText.trim()) {return;}
+    if (!commentText.trim()) {
+      return;
+    }
 
     // In a real app, this would submit to your backend
     // Comment submitted successfully
