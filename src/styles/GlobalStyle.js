@@ -80,18 +80,7 @@ const GlobalStyle = createGlobalStyle`
     font-size: var(--fz-xl);
     line-height: 1.3;
 
-    /* Hide custom cursor on touch devices */
-    @media (hover: none) and (pointer: coarse) {
-      cursor: auto !important;
-    }
-  }
 
-  /* Hide custom cursor element on touch devices */
-  @media (hover: none) and (pointer: coarse) {
-    [data-custom-cursor] {
-      display: none !important;
-    }
-  }
 
     @media (max-width: 480px) {
       font-size: var(--fz-lg);
@@ -460,65 +449,7 @@ const GlobalStyle = createGlobalStyle`
 
   ${PrismStyles};
 
-  /* Custom Cursor Styling - Ultra Aggressive */
-  html, body {
-    cursor: none !important;
-  }
-  
-  /* Hide default cursor on all interactive elements */
-  a, button, input, textarea, select, [role="button"], [tabindex], label, div, span, p, h1, h2, h3, h4, h5, h6 {
-    cursor: none !important;
-  }
 
-  /* Force hide cursor on any element that might show it */
-  * {
-    cursor: none !important;
-  }
-
-  /* Ensure cursor is hidden even with browser overrides */
-  html {
-    cursor: none !important;
-  }
-
-  /* Additional tab switching protection */
-  body:focus-within {
-    cursor: none !important;
-  }
-
-  /* Force cursor hiding on any focus state */
-  *:focus {
-    cursor: none !important;
-  }
-
-  /* Prevent cursor from showing during transitions */
-  *:hover {
-    cursor: none !important;
-  }
-
-  /* Override any browser default cursor behaviors */
-  *::before, *::after {
-    cursor: none !important;
-  }
-
-  /* Ultra aggressive cursor hiding */
-  *:active, *:visited, *:link {
-    cursor: none !important;
-  }
-
-  /* Force cursor hiding on any pseudo-class */
-  *:first-child, *:last-child, *:nth-child(n) {
-    cursor: none !important;
-  }
-
-  /* Override any inline styles */
-  [style*="cursor"] {
-    cursor: none !important;
-  }
-
-  /* Cal.com Custom Styling */
-  [data-cal-link] {
-    cursor: none;
-  }
 
   /* Override Cal.com default colors with custom branding */
   .cal-embed {
