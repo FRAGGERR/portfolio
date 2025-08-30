@@ -80,6 +80,19 @@ const GlobalStyle = createGlobalStyle`
     font-size: var(--fz-xl);
     line-height: 1.3;
 
+    /* Hide custom cursor on touch devices */
+    @media (hover: none) and (pointer: coarse) {
+      cursor: auto !important;
+    }
+  }
+
+  /* Hide custom cursor element on touch devices */
+  @media (hover: none) and (pointer: coarse) {
+    [data-custom-cursor] {
+      display: none !important;
+    }
+  }
+
     @media (max-width: 480px) {
       font-size: var(--fz-lg);
     }

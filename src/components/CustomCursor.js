@@ -16,8 +16,22 @@ const CursorDot = styled.div`
 const CustomCursor = () => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isVisible, setIsVisible] = useState(false);
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
 
   useEffect(() => {
+    // Check if device supports touch
+    const checkTouchDevice = () => (
+      'ontouchstart' in window || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0
+    );
+
+    const touchDevice = checkTouchDevice();
+    setIsTouchDevice(touchDevice);
+
+    // If it's a touch device, don't initialize the custom cursor
+    if (touchDevice) {
+      return;
+    }
+
     let mouseX = 0;
     let mouseY = 0;
     let dotX = 0;
@@ -127,10 +141,14 @@ const CustomCursor = () => {
     };
   }, []);
 
-  if (!isVisible) {return null;}
+  // Don't render custom cursor on touch devices
+  if (isTouchDevice || !isVisible) {
+    return null;
+  }
 
   return (
     <CursorDot
+      data-custom-cursor
       style={{
         left: mousePosition.x,
         top: mousePosition.y,
