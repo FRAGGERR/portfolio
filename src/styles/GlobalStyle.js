@@ -415,6 +415,10 @@ const GlobalStyle = createGlobalStyle`
     a {
       ${({ theme }) => theme.mixins.inlineLink};
       line-height: 1.5;
+      
+      &:after {
+        bottom: 0.1em;
+      }
     }
   }
 

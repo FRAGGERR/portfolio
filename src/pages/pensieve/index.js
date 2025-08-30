@@ -22,6 +22,13 @@ const StyledMainContainer = styled.main`
     }
   }
 
+  .back-button {
+    ${({ theme }) => theme.mixins.button};
+    margin: 50px auto 0;
+    display: block;
+    width: fit-content;
+  }
+
   footer {
     ${({ theme }) => theme.mixins.flexBetween};
     width: 100%;
@@ -196,6 +203,10 @@ const PensievePage = ({ location, data }) => {
               );
             })}
         </StyledGrid>
+
+        <Link className="back-button" to="/#articles">
+          ← Back to Home
+        </Link>
       </StyledMainContainer>
     </Layout>
   );
@@ -211,7 +222,10 @@ export default PensievePage;
 export const pageQuery = graphql`
   {
     allMarkdownRemark(
-      filter: { fileAbsolutePath: { regex: "/content/posts/" }, frontmatter: { draft: { ne: true } } }
+      filter: {
+        fileAbsolutePath: { regex: "/content/posts/" }
+        frontmatter: { draft: { ne: true } }
+      }
       sort: { fields: [frontmatter___date], order: DESC }
     ) {
       edges {

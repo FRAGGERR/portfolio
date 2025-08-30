@@ -38,7 +38,7 @@ const StyledContactSection = styled.section`
 
   .email-link {
     ${({ theme }) => theme.mixins.bigButton};
-    margin-top: 50px;
+    margin: 80px auto 0;
   }
 `;
 
