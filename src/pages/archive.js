@@ -9,6 +9,18 @@ import { Layout } from '@components';
 import { Icon } from '@components/icons';
 import { usePrefersReducedMotion } from '@hooks';
 
+const StyledBackButton = styled.button`
+  ${({ theme }) => theme.mixins.button};
+  margin: 50px auto 0;
+  display: block;
+  cursor: pointer;
+
+  @media (max-width: 768px) {
+    margin: 30px auto 0;
+    padding: 1rem 1.5rem;
+  }
+`;
+
 const StyledTableContainer = styled.div`
   margin: 100px -20px;
 
@@ -132,6 +144,7 @@ const StyledTableContainer = styled.div`
 const ArchivePage = ({ location, data }) => {
   const projects = data.allMarkdownRemark.edges;
   const revealTitle = useRef(null);
+  const revealBackButton = useRef(null);
   const revealTable = useRef(null);
   const revealProjects = useRef([]);
   const prefersReducedMotion = usePrefersReducedMotion();
@@ -142,9 +155,15 @@ const ArchivePage = ({ location, data }) => {
     }
 
     sr.reveal(revealTitle.current, srConfig());
+    sr.reveal(revealBackButton.current, srConfig(100));
     sr.reveal(revealTable.current, srConfig(200, 0));
     revealProjects.current.forEach((ref, i) => sr.reveal(ref, srConfig(i * 10)));
   }, []);
+
+  const handleBackClick = () => {
+    // Navigate to projects section without using Link
+    window.location.href = '/#projects';
+  };
 
   return (
     <Layout location={location}>
@@ -153,7 +172,7 @@ const ArchivePage = ({ location, data }) => {
       <main>
         <header ref={revealTitle}>
           <h1 className="big-heading">Archive</h1>
-          <p className="subtitle">A big list of things I’ve worked on</p>
+          <p className="subtitle">A big list of things I've worked on</p>
         </header>
 
         <StyledTableContainer ref={revealTable}>
@@ -212,6 +231,13 @@ const ArchivePage = ({ location, data }) => {
             </tbody>
           </table>
         </StyledTableContainer>
+
+        <StyledBackButton
+          ref={revealBackButton}
+          onClick={handleBackClick}
+          aria-label="Back to Projects">
+          Back to Projects
+        </StyledBackButton>
       </main>
     </Layout>
   );

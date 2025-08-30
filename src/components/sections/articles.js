@@ -233,7 +233,17 @@ const Articles = () => {
   const articleInner = node => {
     const { frontmatter } = node;
     const { title, description, slug, date, tags } = frontmatter;
-    const formattedDate = new Date(date).toLocaleDateString();
+
+    // Format date to show as "22 July 2025"
+    const formatDate = dateString => {
+      const date = new Date(dateString);
+      const day = date.getDate();
+      const month = date.toLocaleDateString('en-US', { month: 'long' });
+      const year = date.getFullYear();
+      return `${day} ${month} ${year}`;
+    };
+
+    const formattedDate = formatDate(date);
 
     return (
       <div className="article-inner">
@@ -261,7 +271,7 @@ const Articles = () => {
   return (
     <StyledArticlesSection id="articles">
       <h2 className="numbered-heading" ref={revealTitle}>
-        Articles & Publications
+        Articles
       </h2>
 
       <ul className="articles-list">
