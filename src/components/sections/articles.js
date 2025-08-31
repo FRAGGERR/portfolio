@@ -209,7 +209,7 @@ const Articles = () => {
     }
   `);
 
-  const [showMore, setShowMore] = useState(false);
+  const [showMore] = useState(false);
   const revealTitle = useRef(null);
   const revealArchiveLink = useRef(null);
   const revealArticles = useRef([]);
@@ -225,10 +225,10 @@ const Articles = () => {
     revealArticles.current.forEach((ref, i) => sr.reveal(ref, srConfig(i * 100)));
   }, []);
 
-  const GRID_LIMIT = 6;
+  const GRID_LIMIT = 4;
   const articles = data.articles.edges.filter(({ node }) => node);
-  const firstSix = articles.slice(0, GRID_LIMIT);
-  const articlesToShow = showMore ? articles : firstSix;
+  const firstFour = articles.slice(0, GRID_LIMIT);
+  const articlesToShow = showMore ? articles : firstFour;
 
   const articleInner = node => {
     const { frontmatter } = node;
@@ -304,12 +304,6 @@ const Articles = () => {
           </TransitionGroup>
         )}
       </ul>
-
-      {articles.length > GRID_LIMIT && (
-        <button className="more-button" onClick={() => setShowMore(!showMore)}>
-          Show {showMore ? 'Less' : 'More'}
-        </button>
-      )}
 
       <Link className="archive-link" to="/pensieve" ref={revealArchiveLink}>
         View All Articles

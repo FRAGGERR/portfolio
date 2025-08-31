@@ -41,6 +41,40 @@ const StyledProjectsSection = styled.section`
     ${({ theme }) => theme.mixins.button};
     margin: 80px auto 0;
   }
+
+  .more-link {
+    font-size: 80%;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    color: inherit;
+    text-decoration: none;
+    transition: var(--transition);
+    font-family: var(--font-mono);
+    font-size: var(--fz-sm);
+    position: relative;
+
+    &:hover {
+      color: var(--green);
+    }
+
+    &:after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 0.5px;
+      bottom: 0.01em;
+      left: 0;
+      background-color: var(--green);
+      transition: width 0.3s ease;
+    }
+
+    &:hover:after {
+      width: 100%;
+    }
+  }
 `;
 
 const StyledProject = styled.li`
@@ -194,6 +228,7 @@ const Projects = () => {
   const revealTitle = useRef(null);
   const revealArchiveLink = useRef(null);
   const revealProjects = useRef([]);
+  const revealMoreButton = useRef(null);
   const prefersReducedMotion = usePrefersReducedMotion();
 
   useEffect(() => {
@@ -202,6 +237,7 @@ const Projects = () => {
     }
 
     sr.reveal(revealTitle.current, srConfig());
+    sr.reveal(revealMoreButton.current, srConfig());
     sr.reveal(revealArchiveLink.current, srConfig());
     revealProjects.current.forEach((ref, i) => sr.reveal(ref, srConfig(i * 100)));
   }, []);
@@ -267,9 +303,12 @@ const Projects = () => {
     <StyledProjectsSection>
       <h2 ref={revealTitle}>Other Noteworthy Projects</h2>
 
-      <Link className="inline-link archive-link" to="/archive" ref={revealArchiveLink}>
-        view the archive
-      </Link>
+      <button
+        className="inline-link more-link"
+        ref={revealMoreButton}
+        onClick={() => setShowMore(!showMore)}>
+        Show {showMore ? 'Less' : 'More'}
+      </button>
 
       <ul className="projects-grid">
         {prefersReducedMotion ? (
@@ -302,9 +341,9 @@ const Projects = () => {
         )}
       </ul>
 
-      <button className="more-button" onClick={() => setShowMore(!showMore)}>
-        Show {showMore ? 'Less' : 'More'}
-      </button>
+      <Link className="more-button archive-button" to="/archive">
+        View The Archive
+      </Link>
     </StyledProjectsSection>
   );
 };

@@ -1,16 +1,19 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { graphql, Link } from 'gatsby';
-import kebabCase from 'lodash/kebabCase';
+
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 import styled from 'styled-components';
 import { Layout } from '@components';
-import { IconBookmark } from '@components/icons';
 
 const StyledMainContainer = styled.main`
+  width: 85%;
+  margin: 0 auto;
+  padding: 200px 25px 0 25px;
+
   & > header {
-    margin-bottom: 100px;
-    text-align: center;
+    margin-bottom: 80px;
+    text-align: left;
 
     a {
       &:hover,
@@ -24,126 +27,153 @@ const StyledMainContainer = styled.main`
 
   .back-button {
     ${({ theme }) => theme.mixins.button};
-    margin: 50px auto 0;
+    margin: 80px auto 0;
     display: block;
     width: fit-content;
   }
 
-  footer {
-    ${({ theme }) => theme.mixins.flexBetween};
+  @media (max-width: 768px) {
+    width: 85%;
+    padding: 150px 25px 0 25px;
+
+    & > header {
+      margin-bottom: 60px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    width: 95%;
+    padding: 120px 15px 0 15px;
+
+    & > header {
+      margin-bottom: 40px;
+    }
+  }
+`;
+
+const StyledTableContainer = styled.div`
+  margin: 100px 0px;
+
+  @media (max-width: 768px) {
+    margin: 50px -15px;
+  }
+
+  @media (max-width: 480px) {
+    margin: 30px -10px;
+  }
+
+  table {
     width: 100%;
-    margin-top: 20px;
-  }
-`;
-const StyledGrid = styled.ul`
-  ${({ theme }) => theme.mixins.resetList};
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  grid-gap: 15px;
-  margin-top: 50px;
-  position: relative;
+    border-collapse: collapse;
 
-  @media (max-width: 1080px) {
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  }
-`;
-const StyledPost = styled.li`
-  transition: var(--transition);
-  cursor: default;
-
-  @media (prefers-reduced-motion: no-preference) {
-    &:hover,
-    &:focus-within {
-      .post__inner {
-        transform: translateY(-7px);
+    .hide-on-mobile {
+      @media (max-width: 768px) {
+        display: none;
       }
     }
-  }
 
-  a {
-    position: relative;
-    z-index: 1;
-  }
-
-  .post__inner {
-    ${({ theme }) => theme.mixins.boxShadow};
-    ${({ theme }) => theme.mixins.flexBetween};
-    flex-direction: column;
-    align-items: flex-start;
-    position: relative;
-    height: 100%;
-    padding: 2rem 1.75rem;
-    border-radius: var(--border-radius);
-    transition: var(--transition);
-    background-color: var(--light-navy);
-
-    header,
-    a {
-      width: 100%;
-    }
-  }
-
-  .post__icon {
-    ${({ theme }) => theme.mixins.flexBetween};
-    color: var(--green);
-    margin-bottom: 30px;
-    margin-left: -5px;
-
-    svg {
-      width: 40px;
-      height: 40px;
-    }
-  }
-
-  .post__title {
-    margin: 0 0 10px;
-    color: var(--lightest-slate);
-    font-size: var(--fz-xxl);
-
-    a {
-      position: static;
-
-      &:before {
-        content: '';
-        display: block;
-        position: absolute;
-        z-index: 0;
-        width: 100%;
-        height: 100%;
-        top: 0;
-        left: 0;
+    tbody tr {
+      &:hover,
+      &:focus {
+        background-color: var(--light-navy);
       }
     }
-  }
 
-  .post__desc {
-    color: var(--light-slate);
-    font-size: 17px;
-  }
+    th,
+    td {
+      padding: 10px;
+      text-align: left;
 
-  .post__date {
-    color: var(--light-slate);
-    font-family: var(--font-mono);
-    font-size: var(--fz-xxs);
-    text-transform: uppercase;
-  }
+      &:first-child {
+        padding-left: 20px;
 
-  ul.post__tags {
-    display: flex;
-    align-items: flex-end;
-    flex-wrap: wrap;
-    padding: 0;
-    margin: 0;
-    list-style: none;
+        @media (max-width: 768px) {
+          padding-left: 10px;
+        }
+      }
+      &:last-child {
+        padding-right: 20px;
 
-    li {
-      color: var(--green);
-      font-family: var(--font-mono);
-      font-size: var(--fz-xxs);
-      line-height: 1.75;
+        @media (max-width: 768px) {
+          padding-right: 10px;
+        }
+      }
 
-      &:not(:last-of-type) {
-        margin-right: 15px;
+      svg {
+        width: 20px;
+        height: 20px;
+      }
+    }
+
+    tr {
+      cursor: default;
+
+      td:first-child {
+        border-top-left-radius: var(--border-radius);
+        border-bottom-left-radius: var(--border-radius);
+      }
+      td:last-child {
+        border-top-right-radius: var(--border-radius);
+        border-bottom-right-radius: var(--border-radius);
+      }
+    }
+
+    td {
+      &.published {
+        padding-right: 20px;
+        color: var(--green);
+        font-family: var(--font-mono);
+        font-size: var(--fz-sm);
+        font-weight: 600;
+        white-space: nowrap;
+
+        @media (max-width: 768px) {
+          padding-right: 10px;
+          font-size: var(--fz-sm);
+        }
+      }
+
+      &.title {
+        padding-top: 15px;
+        padding-right: 20px;
+        color: var(--lightest-slate);
+        font-size: var(--fz-xl);
+        font-weight: 600;
+        line-height: 1.25;
+
+        a {
+          color: inherit;
+          text-decoration: none;
+          transition: var(--transition);
+
+          &:hover {
+            color: var(--green);
+          }
+        }
+      }
+
+      &.tags {
+        font-size: var(--fz-xxs);
+        font-family: var(--font-mono);
+        line-height: 1.5;
+        color: var(--light-slate);
+
+        .separator {
+          margin: 0 5px;
+        }
+
+        span {
+          display: inline-block;
+        }
+      }
+
+      &.comments {
+        min-width: 100px;
+        color: var(--green);
+        font-family: var(--font-mono);
+        font-size: var(--fz-sm);
+        font-weight: 600;
+        text-align: center;
       }
     }
   }
@@ -151,6 +181,38 @@ const StyledPost = styled.li`
 
 const PensievePage = ({ location, data }) => {
   const posts = data.allMarkdownRemark.edges;
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  const formatDate = (dateString, isMobile = false) => {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+
+    if (isMobile) {
+      return year.toString();
+    }
+
+    const month = date.toLocaleDateString('en-US', { month: 'short' });
+    const day = date.getDate();
+    return `${month} ${day}, ${year}`;
+  };
+
+  // Mock comment count for demonstration
+  const getCommentCount = index => {
+    // In a real app, this would come from your backend
+    const counts = [3, 1, 0, 2, 1, 0, 1, 2];
+    return counts[index] || 0;
+  };
 
   return (
     <Layout location={location}>
@@ -166,43 +228,49 @@ const PensievePage = ({ location, data }) => {
           </p>
         </header>
 
-        <StyledGrid>
-          {posts.length > 0 &&
-            posts.map(({ node }, i) => {
-              const { frontmatter } = node;
-              const { title, description, slug, date, tags } = frontmatter;
-              const formattedDate = new Date(date).toLocaleDateString();
+        <StyledTableContainer>
+          <table>
+            <thead>
+              <tr>
+                <th>Published</th>
+                <th>Title</th>
+                <th className="hide-on-mobile">Tags</th>
+                <th>Comments</th>
+              </tr>
+            </thead>
+            <tbody>
+              {posts.length > 0 &&
+                posts.map(({ node }, i) => {
+                  const { frontmatter } = node;
+                  const { title, slug, date, tags } = frontmatter;
+                  const formattedDate = formatDate(date, isMobile);
+                  const commentCount = getCommentCount(i);
 
-              return (
-                <StyledPost key={i}>
-                  <div className="post__inner">
-                    <header>
-                      <div className="post__icon">
-                        <IconBookmark />
-                      </div>
-                      <h5 className="post__title">
+                  return (
+                    <tr key={i}>
+                      <td className="published">{formattedDate}</td>
+                      <td className="title">
                         <Link to={slug}>{title}</Link>
-                      </h5>
-                      <p className="post__desc">{description}</p>
-                    </header>
-
-                    <footer>
-                      <span className="post__date">{formattedDate}</span>
-                      <ul className="post__tags">
-                        {tags.map((tag, i) => (
-                          <li key={i}>
-                            <Link to={`/pensieve/tags/${kebabCase(tag)}/`} className="inline-link">
-                              #{tag}
-                            </Link>
-                          </li>
-                        ))}
-                      </ul>
-                    </footer>
-                  </div>
-                </StyledPost>
-              );
-            })}
-        </StyledGrid>
+                      </td>
+                      <td className="tags hide-on-mobile">
+                        {tags && tags.length > 0 ? (
+                          tags.map((tag, i) => (
+                            <span key={i}>
+                              {tag}
+                              {i !== tags.length - 1 && <span className="separator">&middot;</span>}
+                            </span>
+                          ))
+                        ) : (
+                          <span>—</span>
+                        )}
+                      </td>
+                      <td className="comments">{commentCount > 0 ? commentCount : '—'}</td>
+                    </tr>
+                  );
+                })}
+            </tbody>
+          </table>
+        </StyledTableContainer>
 
         <Link className="back-button" to="/#articles">
           ← Back to Home

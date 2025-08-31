@@ -11,12 +11,12 @@ import { usePrefersReducedMotion } from '@hooks';
 
 const StyledBackButton = styled.button`
   ${({ theme }) => theme.mixins.button};
-  margin: 50px auto 0;
+  margin: 100px auto 0;
   display: block;
   cursor: pointer;
 
   @media (max-width: 768px) {
-    margin: 30px auto 0;
+    margin: 80px auto 0;
     padding: 1rem 1.5rem;
   }
 `;
@@ -236,7 +236,7 @@ const ArchivePage = ({ location, data }) => {
           ref={revealBackButton}
           onClick={handleBackClick}
           aria-label="Back to Projects">
-          Back to Projects
+          ← Back to Projects
         </StyledBackButton>
       </main>
     </Layout>
