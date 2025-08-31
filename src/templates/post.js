@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useLayoutEffect } from 'react';
 import { graphql, Link } from 'gatsby';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
@@ -48,15 +48,24 @@ const StyledBreadcrumb = styled.div`
     font-size: var(--fz-sm);
     text-decoration: none;
     transition: var(--transition);
+    display: flex;
+    align-items: center;
 
     &:hover {
       color: var(--lightest-slate);
+
+      .arrow {
+        transform: translateX(-3px);
+        color: var(--lightest-slate);
+      }
     }
   }
 
   .arrow {
     color: var(--light-slate);
     margin-right: 10px;
+    transition: var(--transition);
+    font-size: var(--fz-md);
   }
 
   @media (max-width: 768px) {
@@ -698,6 +707,7 @@ const PostTemplate = ({ data, location }) => {
   const [activeTab, setActiveTab] = useState('write');
   const [commentText, setCommentText] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [tocReady, setTocReady] = useState(false);
 
   const formatDate = dateString => {
     const date = new Date(dateString);
@@ -763,6 +773,11 @@ const PostTemplate = ({ data, location }) => {
       });
     });
 
+    // Set TOC as ready if we found headings
+    if (headings.length > 0) {
+      setTocReady(true);
+    }
+
     return headings;
   };
 
@@ -813,19 +828,72 @@ const PostTemplate = ({ data, location }) => {
     return () => window.removeEventListener('scroll', throttledScroll);
   }, []);
 
-  // Generate TOC after component mounts and content is loaded
+  // Generate TOC immediately after DOM updates
+  useLayoutEffect(() => {
+    // Check if we're in browser environment
+    if (typeof window === 'undefined' || typeof document === 'undefined') {
+      return;
+    }
+
+    // Try to generate TOC immediately
+    const articleContent = document.querySelector('.post-content');
+    if (articleContent) {
+      const headings = articleContent.querySelectorAll('h1, h2, h3');
+      if (headings.length > 0) {
+        generateTableOfContents();
+        setTocReady(true);
+        return;
+      }
+    }
+  }, [html]); // Re-run when HTML content changes
+
+  // Generate TOC after component mounts and content is loaded (fallback)
   useEffect(() => {
     // Check if we're in browser environment
     if (typeof window === 'undefined' || typeof document === 'undefined') {
       return;
     }
 
-    // Wait for content to be rendered
-    const timer = setTimeout(() => {
-      generateTableOfContents();
+    // Function to check if content is ready and generate TOC
+    const checkContentAndGenerateTOC = () => {
+      const articleContent = document.querySelector('.post-content');
+      if (articleContent) {
+        const headings = articleContent.querySelectorAll('h1, h2, h3');
+        if (headings.length > 0) {
+          generateTableOfContents();
+          setTocReady(true);
+          return true; // Content is ready
+        }
+      }
+      return false; // Content not ready yet
+    };
+
+    // Try immediately
+    if (checkContentAndGenerateTOC()) {
+      return;
+    }
+
+    // If not ready, use a more aggressive polling approach
+    const maxAttempts = 20; // Try for up to 2 seconds
+    let attempts = 0;
+
+    const interval = setInterval(() => {
+      attempts++;
+      if (checkContentAndGenerateTOC() || attempts >= maxAttempts) {
+        clearInterval(interval);
+      }
     }, 100);
 
-    return () => clearTimeout(timer);
+    // Also try with a longer timeout as fallback
+    const fallbackTimer = setTimeout(() => {
+      clearInterval(interval);
+      checkContentAndGenerateTOC();
+    }, 2000);
+
+    return () => {
+      clearInterval(interval);
+      clearTimeout(fallbackTimer);
+    };
   }, []);
 
   // Find heading by topic name
@@ -965,8 +1033,10 @@ const PostTemplate = ({ data, location }) => {
       <StyledPostContainer>
         <StyledMainContent>
           <StyledBreadcrumb>
-            <span className="arrow">&larr;</span>
-            <Link to="/pensieve">All memories</Link>
+            <Link to="/pensieve">
+              <span className="arrow">&larr;</span>
+              All Memories
+            </Link>
           </StyledBreadcrumb>
 
           <StyledPostHeader>
@@ -1074,7 +1144,19 @@ const PostTemplate = ({ data, location }) => {
           <StyledSidebarSection>
             <h3>Table of Contents</h3>
             <StyledTableOfContents>
-              <ul className="toc-list">{renderTableOfContents()}</ul>
+              {tocReady ? (
+                renderTableOfContents().length > 0 ? (
+                  <ul className="toc-list">{renderTableOfContents()}</ul>
+                ) : (
+                  <div style={{ color: 'var(--light-slate)', fontStyle: 'italic' }}>
+                    No headings found in this article.
+                  </div>
+                )
+              ) : (
+                <div style={{ color: 'var(--light-slate)', fontStyle: 'italic' }}>
+                  Loading table of contents...
+                </div>
+              )}
             </StyledTableOfContents>
           </StyledSidebarSection>
         </StyledSidebar>

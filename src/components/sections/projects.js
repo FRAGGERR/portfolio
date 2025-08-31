@@ -326,7 +326,7 @@ const Projects = () => {
                   key={i}
                   classNames="fadeup"
                   timeout={i >= GRID_LIMIT ? (i - GRID_LIMIT) * 300 : 300}
-                  exit={false}>
+                  exit={true}>
                   <StyledProject
                     key={i}
                     ref={el => (revealProjects.current[i] = el)}

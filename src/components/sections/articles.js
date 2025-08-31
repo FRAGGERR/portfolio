@@ -290,7 +290,7 @@ const Articles = () => {
                   key={i}
                   classNames="fadeup"
                   timeout={i >= GRID_LIMIT ? (i - GRID_LIMIT) * 300 : 300}
-                  exit={false}>
+                  exit={true}>
                   <StyledArticle
                     key={i}
                     ref={el => (revealArticles.current[i] = el)}

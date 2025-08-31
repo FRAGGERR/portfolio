@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { graphql, Link } from 'gatsby';
+import { graphql, Link, navigate } from 'gatsby';
 
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
@@ -9,7 +9,7 @@ import { Layout } from '@components';
 const StyledMainContainer = styled.main`
   width: 85%;
   margin: 0 auto;
-  padding: 200px 25px 0 25px;
+  padding: 200px 25px 120px 25px; /* Added bottom padding */
 
   & > header {
     margin-bottom: 80px;
@@ -18,7 +18,8 @@ const StyledMainContainer = styled.main`
     a {
       &:hover,
       &:focus {
-        cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='48' viewport='0 0 100 100' style='fill:black;font-size:24px;'><text y='50%'>⚡</text></svg>")
+        cursor:
+          url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='48' viewport='0 0 100 100' style='fill:black;font-size:24px;'><text y='50%'>⚡</text></svg>")
             20 0,
           auto;
       }
@@ -27,26 +28,49 @@ const StyledMainContainer = styled.main`
 
   .back-button {
     ${({ theme }) => theme.mixins.button};
-    margin: 80px auto 0;
+    margin: 80px auto 120px;
     display: block;
     width: fit-content;
+    position: relative;
+    z-index: 10;
+  }
+
+  .back-button-wrapper {
+    margin-bottom: 80px;
+    padding-bottom: 10px;
+    min-height: 100px; /* Ensure minimum height for spacing */
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   @media (max-width: 768px) {
     width: 85%;
-    padding: 150px 25px 0 25px;
+    padding: 150px 25px 80px 25px; /* Adjusted bottom padding for mobile */
 
     & > header {
       margin-bottom: 60px;
+    }
+
+    .back-button-wrapper {
+      margin-bottom: 80px;
+      padding-bottom: 30px;
+      min-height: 120px;
     }
   }
 
   @media (max-width: 480px) {
     width: 95%;
-    padding: 120px 15px 0 15px;
+    padding: 120px 15px 60px 15px; /* Adjusted bottom padding for small mobile */
 
     & > header {
       margin-bottom: 40px;
+    }
+
+    .back-button-wrapper {
+      margin-bottom: 60px;
+      padding-bottom: 20px;
+      min-height: 100px;
     }
   }
 `;
@@ -247,7 +271,19 @@ const PensievePage = ({ location, data }) => {
                   const commentCount = getCommentCount(i);
 
                   return (
-                    <tr key={i}>
+                    <tr
+                      key={i}
+                      style={{ cursor: 'pointer' }}
+                      onClick={() => navigate(slug)}
+                      onKeyDown={e => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault();
+                          navigate(slug);
+                        }
+                      }}
+                      tabIndex={0}
+                      role="button"
+                      aria-label={`Read article: ${title}`}>
                       <td className="published">{formattedDate}</td>
                       <td className="title">
                         <Link to={slug}>{title}</Link>
@@ -272,9 +308,11 @@ const PensievePage = ({ location, data }) => {
           </table>
         </StyledTableContainer>
 
-        <Link className="back-button" to="/#articles">
-          ← Back to Home
-        </Link>
+        <div className="back-button-wrapper">
+          <Link className="back-button" to="/#articles">
+            ← Back to Home
+          </Link>
+        </div>
       </StyledMainContainer>
     </Layout>
   );
