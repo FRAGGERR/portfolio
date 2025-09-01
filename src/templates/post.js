@@ -298,22 +298,22 @@ const StyledPostContent = styled.div`
   }
 
   h1 {
-    font-size: var(--fz-xxl);
-  }
-  h2 {
-    font-size: var(--fz-xl);
-  }
-  h3 {
     font-size: var(--fz-lg);
   }
-  h4 {
+  h2 {
     font-size: var(--fz-md);
   }
-  h5 {
+  h3 {
     font-size: var(--fz-sm);
   }
-  h6 {
+  h4 {
+    font-size: var(--fz-sm);
+  }
+  h5 {
     font-size: var(--fz-xs);
+  }
+  h6 {
+    font-size: var(--fz-xxs);
   }
 
   p {
@@ -330,15 +330,18 @@ const StyledPostContent = styled.div`
     background-color: rgba(100, 255, 138, 0.1);
     color: var(--green);
     border-radius: 4px;
-    font-size: 0.9em;
-    padding: 0.2em 0.4em;
+    font-size: 0.75em;
+    padding: 0.1em 0.25em;
     font-family: var(--font-mono);
     word-break: break-word;
     overflow-wrap: break-word;
+    display: inline;
+    vertical-align: baseline;
+    line-height: inherit;
 
     @media (max-width: 480px) {
-      font-size: 0.8em;
-      padding: 0.15em 0.3em;
+      font-size: 0.65em;
+      padding: 0.08em 0.2em;
     }
   }
 
@@ -353,6 +356,28 @@ const StyledPostContent = styled.div`
     width: 100%;
     box-sizing: border-box;
     position: relative;
+
+    /* Language label styling */
+    &::before {
+      content: attr(data-language);
+      position: absolute;
+      top: 8px;
+      left: 12px;
+      background-color: var(--green);
+      color: var(--navy);
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-size: 9px;
+      font-family: var(--font-mono);
+      font-weight: 600;
+      text-transform: uppercase;
+      z-index: 5;
+    }
+
+    /* Add top padding when language label is present */
+    &[data-language] {
+      padding-top: 60px;
+    }
 
     /* Custom scrollbar styling */
     &::-webkit-scrollbar {
@@ -391,7 +416,7 @@ const StyledPostContent = styled.div`
       background-color: transparent;
       color: var(--lightest-slate);
       padding: 0;
-      font-size: var(--fz-sm);
+      font-size: 10px;
       white-space: pre;
       word-wrap: break-word;
       overflow-wrap: break-word;
@@ -613,6 +638,11 @@ const StyledPostContent = styled.div`
     display: inline-block;
     vertical-align: baseline;
   }
+
+  /* Copy button styles - removed */
+  .copy-button {
+    display: none;
+  }
 `;
 
 const PostTemplate = ({ data, location }) => {
@@ -786,127 +816,43 @@ const PostTemplate = ({ data, location }) => {
     };
   }, []);
 
-  // Add copy functionality to code blocks
+  // Add language labels to code blocks (without copy functionality)
   useEffect(() => {
     // Check if we're in browser environment
     if (typeof window === 'undefined' || typeof document === 'undefined') {
       return;
     }
 
-    const addCopyButtons = () => {
+    const addLanguageLabels = () => {
       const codeBlocks = document.querySelectorAll('pre');
 
-      // Check if device supports touch
-      const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-
       codeBlocks.forEach(pre => {
-        // Create copy button element
-        const copyButton = document.createElement('button');
-        copyButton.textContent = 'Copy';
-        copyButton.className = 'copy-button';
-        copyButton.style.cssText = `
-          position: absolute;
-          top: 10px;
-          right: 10px;
-          background-color: var(--green);
-          color: var(--navy);
-          padding: 4px 8px;
-          border-radius: 4px;
-          font-size: 10px;
-          font-family: var(--font-mono);
-          font-weight: 600;
-          cursor: pointer;
-          opacity: ${isTouchDevice ? '1' : '0'};
-          transition: var(--transition);
-          z-index: 10;
-          border: none;
-          outline: none;
-          pointer-events: auto;
-        `;
-
-        // Add hover effect only for non-touch devices
-        if (!isTouchDevice) {
-          pre.addEventListener('mouseenter', () => {
-            copyButton.style.opacity = '1';
-          });
-
-          pre.addEventListener('mouseleave', () => {
-            copyButton.style.opacity = '0';
-          });
+        // Detect language from code block class or content
+        const codeElement = pre.querySelector('code');
+        if (codeElement) {
+          const languageClass = Array.from(codeElement.classList).find(
+            cls => cls.startsWith('language-') || cls.startsWith('lang-'),
+          );
+          if (languageClass) {
+            const language = languageClass.replace('language-', '').replace('lang-', '');
+            pre.setAttribute('data-language', language);
+          }
         }
-
-        // Update button position when code block scrolls horizontally
-        const updateButtonPosition = () => {
-          const preRect = pre.getBoundingClientRect();
-          const scrollLeft = pre.scrollLeft;
-
-          // Keep button in the visible area of the viewport
-          if (scrollLeft > 0) {
-            // When scrolled, position button relative to viewport
-            copyButton.style.position = 'fixed';
-            copyButton.style.top = `${preRect.top + 10}px`;
-            copyButton.style.right = '20px';
-            copyButton.style.zIndex = '1000';
-          } else {
-            // When not scrolled, position button relative to pre element
-            copyButton.style.position = 'absolute';
-            copyButton.style.top = '10px';
-            copyButton.style.right = '10px';
-            copyButton.style.zIndex = '10';
-          }
-        };
-
-        // Add scroll event listener to the pre element
-        pre.addEventListener('scroll', updateButtonPosition);
-
-        // Add click handler
-        copyButton.addEventListener('click', async e => {
-          e.preventDefault();
-          e.stopPropagation();
-
-          const codeElement = pre.querySelector('code');
-          if (codeElement) {
-            try {
-              await navigator.clipboard.writeText(codeElement.textContent);
-              copyButton.textContent = 'Copied!';
-              copyButton.style.backgroundColor = 'var(--green)';
-
-              setTimeout(() => {
-                copyButton.textContent = 'Copy';
-              }, 2000);
-            } catch (err) {
-              console.error('Failed to copy code:', err);
-              copyButton.textContent = 'Failed';
-              copyButton.style.backgroundColor = 'var(--pink)';
-
-              setTimeout(() => {
-                copyButton.textContent = 'Copy';
-                copyButton.style.backgroundColor = 'var(--green)';
-              }, 2000);
-            }
-          }
-        });
-
-        // Append button to pre element
-        pre.appendChild(copyButton);
       });
     };
 
-    // Try to add copy buttons immediately
-    addCopyButtons();
+    // Try to add language labels immediately
+    addLanguageLabels();
 
     // Also try after a short delay to ensure content is loaded
-    const timer = setTimeout(addCopyButtons, 500);
+    const timer = setTimeout(addLanguageLabels, 500);
 
     return () => {
       clearTimeout(timer);
-      // Clean up scroll event listeners
-      const codeBlocks = document.querySelectorAll('pre');
-      codeBlocks.forEach(pre => {
-        pre.removeEventListener('scroll', () => {});
-      });
     };
   }, [html]);
+
+  // Copy functionality removed
 
   // Find heading by topic name
   const findHeadingByTopic = topicName => {
@@ -1065,46 +1011,52 @@ const PostTemplate = ({ data, location }) => {
 
         <StyledSidebar>
           <StyledSidebarSection>
-            <h3>Published</h3>
-            <StyledPublishedDate>{formatDate(date)}</StyledPublishedDate>
+            <AnimatedSection delay={200}>
+              <h3>Published</h3>
+              <StyledPublishedDate>{formatDate(date)}</StyledPublishedDate>
+            </AnimatedSection>
           </StyledSidebarSection>
 
           {tags && tags.length > 0 && (
             <StyledSidebarSection>
-              <h3>Topics</h3>
-              <StyledTopics>
-                <div className="topic-tags">
-                  {tags.map((tag, i) => (
-                    <button
-                      key={i}
-                      type="button"
-                      onClick={() => handleTopicClick(tag)}
-                      className="topic-tag-button">
-                      {tag}
-                    </button>
-                  ))}
-                </div>
-              </StyledTopics>
+              <AnimatedSection delay={400}>
+                <h3>Topics</h3>
+                <StyledTopics>
+                  <div className="topic-tags">
+                    {tags.map((tag, i) => (
+                      <button
+                        key={i}
+                        type="button"
+                        onClick={() => handleTopicClick(tag)}
+                        className="topic-tag-button">
+                        {tag}
+                      </button>
+                    ))}
+                  </div>
+                </StyledTopics>
+              </AnimatedSection>
             </StyledSidebarSection>
           )}
 
           <StyledSidebarSection>
-            <h3>Table of Contents</h3>
-            <StyledTableOfContents>
-              {tocReady ? (
-                renderTableOfContents().length > 0 ? (
-                  <ul className="toc-list">{renderTableOfContents()}</ul>
+            <AnimatedSection delay={600}>
+              <h3>Table of Contents</h3>
+              <StyledTableOfContents>
+                {tocReady ? (
+                  renderTableOfContents().length > 0 ? (
+                    <ul className="toc-list">{renderTableOfContents()}</ul>
+                  ) : (
+                    <div style={{ color: 'var(--light-slate)', fontStyle: 'italic' }}>
+                      No headings found in this article.
+                    </div>
+                  )
                 ) : (
                   <div style={{ color: 'var(--light-slate)', fontStyle: 'italic' }}>
-                    No headings found in this article.
+                    Loading table of contents...
                   </div>
-                )
-              ) : (
-                <div style={{ color: 'var(--light-slate)', fontStyle: 'italic' }}>
-                  Loading table of contents...
-                </div>
-              )}
-            </StyledTableOfContents>
+                )}
+              </StyledTableOfContents>
+            </AnimatedSection>
           </StyledSidebarSection>
         </StyledSidebar>
       </StyledPostContainer>
