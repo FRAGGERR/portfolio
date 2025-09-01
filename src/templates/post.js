@@ -376,7 +376,7 @@ const StyledPostContent = styled.div`
 
     /* Add top padding when language label is present */
     &[data-language] {
-      padding-top: 60px;
+      padding-top: 65px;
     }
 
     /* Custom scrollbar styling */
