@@ -69,6 +69,30 @@ const TransitionStyles = css`
     opacity: 0;
     transition: opacity 300ms var(--easing);
   }
+
+  /* Page Transition */
+  .page-enter {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  .page-enter-active {
+    opacity: 1;
+    transform: translateY(0);
+    transition:
+      opacity 400ms var(--easing),
+      transform 400ms var(--easing);
+  }
+  .page-exit {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .page-exit-active {
+    opacity: 0;
+    transform: translateY(-20px);
+    transition:
+      opacity 300ms var(--easing),
+      transform 300ms var(--easing);
+  }
 `;
 
 export default TransitionStyles;

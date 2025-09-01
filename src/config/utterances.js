@@ -14,7 +14,7 @@ export const utterancesConfig = {
 
   // Theme for the comments widget
   // Options: "github-light", "github-dark", "preferred-color-scheme"
-  theme: 'preferred-color-scheme',
+  theme: 'github-dark',
 
   // Cross-origin setting
   crossOrigin: 'anonymous',

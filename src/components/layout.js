@@ -3,6 +3,7 @@ import styled, { ThemeProvider } from 'styled-components';
 import PropTypes from 'prop-types';
 import { Head, Loader, Nav, Social, Email, Footer } from '@components';
 import { GlobalStyle, theme } from '@styles';
+import PageTransition from './PageTransition';
 
 const StyledContent = styled.div`
   display: flex;
@@ -67,7 +68,7 @@ const Layout = ({ children, location }) => {
               <Email isHome={isHome} />
 
               <div id="content">
-                {children}
+                <PageTransition location={location}>{children}</PageTransition>
                 <Footer />
               </div>
             </StyledContent>
@@ -84,3 +85,6 @@ Layout.propTypes = {
 };
 
 export default Layout;
+
+// Gatsby SSR wrapper
+export const wrapRootElement = ({ element }) => element;

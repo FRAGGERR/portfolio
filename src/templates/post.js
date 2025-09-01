@@ -821,6 +821,7 @@ const PostTemplate = ({ data, location }) => {
           z-index: 10;
           border: none;
           outline: none;
+          pointer-events: auto;
         `;
 
         // Add hover effect only for non-touch devices
@@ -833,6 +834,30 @@ const PostTemplate = ({ data, location }) => {
             copyButton.style.opacity = '0';
           });
         }
+
+        // Update button position when code block scrolls horizontally
+        const updateButtonPosition = () => {
+          const preRect = pre.getBoundingClientRect();
+          const scrollLeft = pre.scrollLeft;
+
+          // Keep button in the visible area of the viewport
+          if (scrollLeft > 0) {
+            // When scrolled, position button relative to viewport
+            copyButton.style.position = 'fixed';
+            copyButton.style.top = `${preRect.top + 10}px`;
+            copyButton.style.right = '20px';
+            copyButton.style.zIndex = '1000';
+          } else {
+            // When not scrolled, position button relative to pre element
+            copyButton.style.position = 'absolute';
+            copyButton.style.top = '10px';
+            copyButton.style.right = '10px';
+            copyButton.style.zIndex = '10';
+          }
+        };
+
+        // Add scroll event listener to the pre element
+        pre.addEventListener('scroll', updateButtonPosition);
 
         // Add click handler
         copyButton.addEventListener('click', async e => {
@@ -875,6 +900,11 @@ const PostTemplate = ({ data, location }) => {
 
     return () => {
       clearTimeout(timer);
+      // Clean up scroll event listeners
+      const codeBlocks = document.querySelectorAll('pre');
+      codeBlocks.forEach(pre => {
+        pre.removeEventListener('scroll', () => {});
+      });
     };
   }, [html]);
 
