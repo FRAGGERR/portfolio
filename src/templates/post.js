@@ -9,39 +9,45 @@ import utterancesConfig from '@config/utterances';
 const StyledPostContainer = styled.main`
   max-width: 1200px;
   margin: 0 auto;
-  display: grid;
-  grid-template-columns: 1fr 300px;
+  display: flex;
+  justify-content: center;
   gap: 60px;
   padding: 0 20px;
   margin-top: 100px;
 
-  @media (max-width: 1080px) {
-    grid-template-columns: 1fr;
-    gap: 40px;
-    margin-top: 80px;
+  @media (max-width: 1400px) {
+    display: block;
+    max-width: 800px;
+    gap: 0;
+    margin-top: 140px;
   }
 
   @media (max-width: 768px) {
     padding: 0 15px;
-    margin-top: 60px;
-    gap: 30px;
+    margin-top: 120px;
   }
 
   @media (max-width: 480px) {
-    padding: 0 10px;
-    margin-top: 50px;
-    gap: 20px;
+    padding: 0 18px;
+    margin-top: 135px;
   }
 `;
 
 const StyledMainContent = styled.div`
   max-width: 800px;
   width: 100%;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  hyphens: auto;
+
+  @media (max-width: 1400px) {
+    max-width: 100%;
+  }
 `;
 
 const StyledBreadcrumb = styled.div`
   margin-bottom: 40px;
-  margin-top: 20px;
+  margin-top: 0;
 
   a {
     color: var(--green);
@@ -71,12 +77,12 @@ const StyledBreadcrumb = styled.div`
 
   @media (max-width: 768px) {
     margin-bottom: 30px;
-    margin-top: 15px;
+    margin-top: 0;
   }
 
   @media (max-width: 480px) {
     margin-bottom: 25px;
-    margin-top: 10px;
+    margin-top: 0;
   }
 `;
 
@@ -85,11 +91,11 @@ const StyledSidebar = styled.aside`
   top: 120px;
   height: fit-content;
   margin-top: 80px;
+  width: 300px;
+  min-width: 300px;
 
-  @media (max-width: 1080px) {
-    position: static;
-    order: -1;
-    margin-top: 0;
+  @media (max-width: 1400px) {
+    display: none;
   }
 `;
 
@@ -116,6 +122,7 @@ const StyledSidebarSection = styled.div`
   @media (max-width: 768px) {
     margin-bottom: 30px;
     padding-bottom: 20px;
+    margin-top: 30px;
 
     h3 {
       font-size: var(--fz-xs);
@@ -261,13 +268,16 @@ const StyledTableOfContents = styled.div`
 `;
 
 const StyledPostHeader = styled.header`
+  margin-top: 40px;
   margin-bottom: 50px;
 
   @media (max-width: 768px) {
+    margin-top: 30px;
     margin-bottom: 40px;
   }
 
   @media (max-width: 480px) {
+    margin-top: 40px;
     margin-bottom: 30px;
   }
 `;
@@ -323,6 +333,13 @@ const StyledPostContent = styled.div`
     font-size: 0.9em;
     padding: 0.2em 0.4em;
     font-family: var(--font-mono);
+    word-break: break-word;
+    overflow-wrap: break-word;
+
+    @media (max-width: 480px) {
+      font-size: 0.8em;
+      padding: 0.15em 0.3em;
+    }
   }
 
   pre {
@@ -330,11 +347,44 @@ const StyledPostContent = styled.div`
     border-radius: var(--border-radius);
     padding: 20px;
     overflow-x: auto;
+    overflow-y: hidden;
     margin: 2em 0;
+    max-width: 100%;
+    width: 100%;
+    box-sizing: border-box;
+    position: relative;
+
+    /* Custom scrollbar styling */
+    &::-webkit-scrollbar {
+      height: 8px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: var(--lightest-navy);
+      border-radius: 4px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: var(--green);
+      border-radius: 4px;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+      background: var(--lightest-slate);
+    }
 
     @media (max-width: 768px) {
       padding: 15px;
       margin: 1.5em 0;
+      font-size: 12px;
+      line-height: 1.4;
+    }
+
+    @media (max-width: 480px) {
+      padding: 12px;
+      margin: 1em 0;
+      font-size: 11px;
+      line-height: 1.3;
     }
 
     code {
@@ -342,6 +392,11 @@ const StyledPostContent = styled.div`
       color: var(--lightest-slate);
       padding: 0;
       font-size: var(--fz-sm);
+      white-space: pre;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      max-width: none;
+      display: block;
     }
   }
 
@@ -355,6 +410,13 @@ const StyledPostContent = styled.div`
     @media (max-width: 768px) {
       margin: 1.5em 0;
       padding-left: 15px;
+      font-size: 14px;
+    }
+
+    @media (max-width: 480px) {
+      margin: 1em 0;
+      padding-left: 10px;
+      font-size: 13px;
     }
   }
 
@@ -363,9 +425,24 @@ const StyledPostContent = styled.div`
     margin: 1.5em 0;
     padding-left: 20px;
 
+    @media (max-width: 768px) {
+      margin: 1.2em 0;
+      padding-left: 15px;
+    }
+
+    @media (max-width: 480px) {
+      margin: 1em 0;
+      padding-left: 10px;
+    }
+
     li {
       margin: 0.5em 0;
       line-height: 1.6;
+
+      @media (max-width: 480px) {
+        margin: 0.4em 0;
+        line-height: 1.5;
+      }
     }
   }
 
@@ -374,18 +451,48 @@ const StyledPostContent = styled.div`
     height: auto;
     border-radius: var(--border-radius);
     margin: 2em 0;
+    display: block;
+
+    @media (max-width: 768px) {
+      margin: 1.5em 0;
+    }
+
+    @media (max-width: 480px) {
+      margin: 1em 0;
+    }
   }
 
   table {
     width: 100%;
     border-collapse: collapse;
     margin: 2em 0;
+    overflow-x: auto;
+    display: block;
+
+    @media (max-width: 768px) {
+      margin: 1.5em 0;
+      font-size: 14px;
+    }
+
+    @media (max-width: 480px) {
+      margin: 1em 0;
+      font-size: 12px;
+    }
 
     th,
     td {
       padding: 12px;
       text-align: left;
       border-bottom: 1px solid var(--lightest-navy);
+      white-space: nowrap;
+
+      @media (max-width: 768px) {
+        padding: 8px;
+      }
+
+      @media (max-width: 480px) {
+        padding: 6px;
+      }
     }
 
     th {
@@ -427,6 +534,84 @@ const StyledPostContent = styled.div`
     p {
       margin: 0.6em 0;
     }
+  }
+
+  /* Ensure long content doesn't break layout */
+  * {
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* Handle long words and URLs */
+  p,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  li,
+  td,
+  th {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    hyphens: auto;
+  }
+
+  /* Force code blocks to respect container width */
+  pre,
+  pre code {
+    max-width: 100% !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Alternative: Allow code to wrap on very small screens */
+  @media (max-width: 480px) {
+    pre {
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+    }
+
+    pre code {
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+    }
+  }
+
+  /* Handle extremely long lines that might still cause issues */
+  pre code {
+    min-width: 0;
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    word-break: break-all;
+  }
+
+  /* Ensure code blocks never exceed container width */
+  pre {
+    min-width: 0;
+    max-width: 100vw;
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+
+  /* Firefox scrollbar styling */
+  pre {
+    scrollbar-width: thin;
+    scrollbar-color: var(--green) var(--lightest-navy);
+  }
+
+  /* Ensure inline code doesn't break layout */
+  code:not(pre code) {
+    white-space: nowrap;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+    vertical-align: baseline;
   }
 `;
 
@@ -600,6 +785,98 @@ const PostTemplate = ({ data, location }) => {
       clearTimeout(fallbackTimer);
     };
   }, []);
+
+  // Add copy functionality to code blocks
+  useEffect(() => {
+    // Check if we're in browser environment
+    if (typeof window === 'undefined' || typeof document === 'undefined') {
+      return;
+    }
+
+    const addCopyButtons = () => {
+      const codeBlocks = document.querySelectorAll('pre');
+
+      // Check if device supports touch
+      const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
+      codeBlocks.forEach(pre => {
+        // Create copy button element
+        const copyButton = document.createElement('button');
+        copyButton.textContent = 'Copy';
+        copyButton.className = 'copy-button';
+        copyButton.style.cssText = `
+          position: absolute;
+          top: 10px;
+          right: 10px;
+          background-color: var(--green);
+          color: var(--navy);
+          padding: 4px 8px;
+          border-radius: 4px;
+          font-size: 10px;
+          font-family: var(--font-mono);
+          font-weight: 600;
+          cursor: pointer;
+          opacity: ${isTouchDevice ? '1' : '0'};
+          transition: var(--transition);
+          z-index: 10;
+          border: none;
+          outline: none;
+        `;
+
+        // Add hover effect only for non-touch devices
+        if (!isTouchDevice) {
+          pre.addEventListener('mouseenter', () => {
+            copyButton.style.opacity = '1';
+          });
+
+          pre.addEventListener('mouseleave', () => {
+            copyButton.style.opacity = '0';
+          });
+        }
+
+        // Add click handler
+        copyButton.addEventListener('click', async e => {
+          e.preventDefault();
+          e.stopPropagation();
+
+          const codeElement = pre.querySelector('code');
+          if (codeElement) {
+            try {
+              await navigator.clipboard.writeText(codeElement.textContent);
+              copyButton.textContent = 'Copied!';
+              copyButton.style.backgroundColor = 'var(--green)';
+
+              setTimeout(() => {
+                copyButton.textContent = 'Copy';
+              }, 2000);
+            } catch (err) {
+              console.error('Failed to copy code:', err);
+              copyButton.textContent = 'Failed';
+              copyButton.style.backgroundColor = 'var(--pink)';
+
+              setTimeout(() => {
+                copyButton.textContent = 'Copy';
+                copyButton.style.backgroundColor = 'var(--green)';
+              }, 2000);
+            }
+          }
+        });
+
+        // Append button to pre element
+        pre.appendChild(copyButton);
+      });
+    };
+
+    // Try to add copy buttons immediately
+    addCopyButtons();
+
+    // Also try after a short delay to ensure content is loaded
+    const timer = setTimeout(addCopyButtons, 500);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [html]);
 
   // Find heading by topic name
   const findHeadingByTopic = topicName => {

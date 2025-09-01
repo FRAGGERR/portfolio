@@ -206,6 +206,7 @@ const StyledTableContainer = styled.div`
 const PensievePage = ({ location, data }) => {
   const posts = data.allMarkdownRemark.edges;
   const [isMobile, setIsMobile] = useState(false);
+  const [commentCounts, setCommentCounts] = useState({});
 
   useEffect(() => {
     const checkMobile = () => {
@@ -217,6 +218,96 @@ const PensievePage = ({ location, data }) => {
 
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
+
+  // Fetch real comment counts from GitHub
+  useEffect(() => {
+    const fetchCommentCounts = async () => {
+      try {
+        const counts = {};
+
+        // Fetch all issues and filter by utterances-bot (Utterances creates issues without labels)
+        const response = await fetch(
+          'https://api.github.com/repos/FRAGGERR/portfolio/issues?state=open&per_page=100',
+          {
+            headers: {
+              Accept: 'application/vnd.github.v3+json',
+            },
+          },
+        );
+
+        if (response.ok) {
+          const issues = await response.json();
+
+          // Filter issues created by utterances-bot (Utterances comments)
+          const utterancesIssues = issues.filter(
+            issue => issue.user && issue.user.login === 'utterances-bot',
+          );
+
+          // Count comments for each post
+          posts.forEach(({ node }) => {
+            const { slug } = node.frontmatter;
+            const postPath = `/pensieve/${slug}`;
+
+            // Find issues that match this post's pathname
+            // Utterances creates issues with the pathname as the title
+            const matchingIssues = utterancesIssues.filter(issue => {
+              const issueTitle = issue.title.toLowerCase();
+              const postPathLower = postPath.toLowerCase();
+
+              // Exact pathname match (most common case)
+              if (issueTitle === postPathLower) {
+                return true;
+              }
+
+              // Check if the issue title contains the post path
+              if (issueTitle.includes(postPathLower)) {
+                return true;
+              }
+
+              // Check if the issue title contains the slug
+              if (issueTitle.includes(slug.toLowerCase())) {
+                return true;
+              }
+
+              // Check if the issue body contains the path
+              const issueBody = (issue.body || '').toLowerCase();
+              if (issueBody.includes(postPathLower)) {
+                return true;
+              }
+
+              return false;
+            });
+
+            if (matchingIssues.length > 0) {
+              // Use the first matching issue's comment count
+              const issue = matchingIssues[0];
+              counts[slug] = issue.comments || 0;
+            } else {
+              counts[slug] = 0;
+            }
+          });
+
+          setCommentCounts(counts);
+        } else {
+          // Fallback to showing 0 for all posts
+          const fallbackCounts = {};
+          posts.forEach(({ node }) => {
+            fallbackCounts[node.frontmatter.slug] = 0;
+          });
+          setCommentCounts(fallbackCounts);
+        }
+      } catch (error) {
+        // Fallback to showing 0 for all posts
+        const fallbackCounts = {};
+        posts.forEach(({ node }) => {
+          fallbackCounts[node.frontmatter.slug] = 0;
+        });
+        setCommentCounts(fallbackCounts);
+      }
+    };
+
+    fetchCommentCounts();
+  }, [posts]);
 
   const formatDate = (dateString, isMobile = false) => {
     const date = new Date(dateString);
@@ -231,12 +322,8 @@ const PensievePage = ({ location, data }) => {
     return `${month} ${day}, ${year}`;
   };
 
-  // Mock comment count for demonstration
-  const getCommentCount = index => {
-    // In a real app, this would come from your backend
-    const counts = [3, 1, 0, 2, 1, 0, 1, 2];
-    return counts[index] || 0;
-  };
+  // Get real comment count for a post
+  const getCommentCount = slug => commentCounts[slug] || 0;
 
   return (
     <Layout location={location}>
@@ -268,7 +355,7 @@ const PensievePage = ({ location, data }) => {
                   const { frontmatter } = node;
                   const { title, slug, date, tags } = frontmatter;
                   const formattedDate = formatDate(date, isMobile);
-                  const commentCount = getCommentCount(i);
+                  const commentCount = getCommentCount(slug);
 
                   return (
                     <tr
@@ -300,7 +387,13 @@ const PensievePage = ({ location, data }) => {
                           <span>—</span>
                         )}
                       </td>
-                      <td className="comments">{commentCount > 0 ? commentCount : '—'}</td>
+                      <td className="comments">
+                        {commentCounts[slug] !== undefined
+                          ? commentCount > 0
+                            ? commentCount
+                            : '—'
+                          : '...'}
+                      </td>
                     </tr>
                   );
                 })}

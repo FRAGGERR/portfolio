@@ -1,4 +1,4 @@
-# 🎨 Portfolio Customization Guide
+# 🎨 Customization Guide
 
 ## 📋 **FILES TO MODIFY (Priority Order)**
 
