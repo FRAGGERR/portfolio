@@ -15,3 +15,4 @@ export { default as Projects } from './sections/projects';
 export { default as Articles } from './sections/articles';
 export { default as Contact } from './sections/contact';
 export { default as Utterances } from './utterances';
+export { default as AnimatedSection } from './AnimatedSection';

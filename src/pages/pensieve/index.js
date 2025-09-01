@@ -4,7 +4,7 @@ import { graphql, Link, navigate } from 'gatsby';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 import styled from 'styled-components';
-import { Layout } from '@components';
+import { Layout, AnimatedSection } from '@components';
 
 const StyledMainContainer = styled.main`
   width: 85%;
@@ -330,82 +330,90 @@ const PensievePage = ({ location, data }) => {
       <Helmet title="Pensieve" />
 
       <StyledMainContainer>
-        <header>
-          <h1 className="big-heading">Pensieve</h1>
-          <p className="subtitle">
-            <a href="https://www.wizardingworld.com/writing-by-jk-rowling/pensieve">
-              a collection of memories
-            </a>
-          </p>
-        </header>
+        <AnimatedSection>
+          <header>
+            <h1 className="big-heading">Pensieve</h1>
+            <p className="subtitle">
+              <a href="https://www.wizardingworld.com/writing-by-jk-rowling/pensieve">
+                a collection of memories
+              </a>
+            </p>
+          </header>
+        </AnimatedSection>
 
-        <StyledTableContainer>
-          <table>
-            <thead>
-              <tr>
-                <th>Published</th>
-                <th>Title</th>
-                <th className="hide-on-mobile">Tags</th>
-                <th>Comments</th>
-              </tr>
-            </thead>
-            <tbody>
-              {posts.length > 0 &&
-                posts.map(({ node }, i) => {
-                  const { frontmatter } = node;
-                  const { title, slug, date, tags } = frontmatter;
-                  const formattedDate = formatDate(date, isMobile);
-                  const commentCount = getCommentCount(slug);
+        <AnimatedSection delay={200}>
+          <StyledTableContainer>
+            <table>
+              <thead>
+                <tr>
+                  <th>Published</th>
+                  <th>Title</th>
+                  <th className="hide-on-mobile">Tags</th>
+                  <th>Comments</th>
+                </tr>
+              </thead>
+              <tbody>
+                {posts.length > 0 &&
+                  posts.map(({ node }, i) => {
+                    const { frontmatter } = node;
+                    const { title, slug, date, tags } = frontmatter;
+                    const formattedDate = formatDate(date, isMobile);
+                    const commentCount = getCommentCount(slug);
 
-                  return (
-                    <tr
-                      key={i}
-                      style={{ cursor: 'pointer' }}
-                      onClick={() => navigate(slug)}
-                      onKeyDown={e => {
-                        if (e.key === 'Enter' || e.key === ' ') {
-                          e.preventDefault();
-                          navigate(slug);
-                        }
-                      }}
-                      tabIndex={0}
-                      role="button"
-                      aria-label={`Read article: ${title}`}>
-                      <td className="published">{formattedDate}</td>
-                      <td className="title">
-                        <Link to={slug}>{title}</Link>
-                      </td>
-                      <td className="tags hide-on-mobile">
-                        {tags && tags.length > 0 ? (
-                          tags.map((tag, i) => (
-                            <span key={i}>
-                              {tag}
-                              {i !== tags.length - 1 && <span className="separator">&middot;</span>}
-                            </span>
-                          ))
-                        ) : (
-                          <span>—</span>
-                        )}
-                      </td>
-                      <td className="comments">
-                        {commentCounts[slug] !== undefined
-                          ? commentCount > 0
-                            ? commentCount
-                            : '—'
-                          : '...'}
-                      </td>
-                    </tr>
-                  );
-                })}
-            </tbody>
-          </table>
-        </StyledTableContainer>
+                    return (
+                      <tr
+                        key={i}
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => navigate(slug)}
+                        onKeyDown={e => {
+                          if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            navigate(slug);
+                          }
+                        }}
+                        tabIndex={0}
+                        role="button"
+                        aria-label={`Read article: ${title}`}>
+                        <td className="published">{formattedDate}</td>
+                        <td className="title">
+                          <Link to={slug}>{title}</Link>
+                        </td>
+                        <td className="tags hide-on-mobile">
+                          {tags && tags.length > 0 ? (
+                            tags.map((tag, i) => (
+                              <span key={i}>
+                                {tag}
+                                {i !== tags.length - 1 && (
+                                  <span className="separator">&middot;</span>
+                                )}
+                              </span>
+                            ))
+                          ) : (
+                            <span>—</span>
+                          )}
+                        </td>
+                        <td className="comments">
+                          {commentCounts[slug] !== undefined
+                            ? commentCount > 0
+                              ? commentCount
+                              : '—'
+                            : '...'}
+                        </td>
+                      </tr>
+                    );
+                  })}
+              </tbody>
+            </table>
+          </StyledTableContainer>
+        </AnimatedSection>
 
-        <div className="back-button-wrapper">
-          <Link className="back-button" to="/#articles">
-            ← Back to Home
-          </Link>
-        </div>
+        <AnimatedSection delay={400}>
+          <div className="back-button-wrapper">
+            <Link className="back-button" to="/#articles">
+              ← Back to Home
+            </Link>
+          </div>
+        </AnimatedSection>
       </StyledMainContainer>
     </Layout>
   );

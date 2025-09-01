@@ -3,7 +3,7 @@ import { graphql, Link } from 'gatsby';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 import styled from 'styled-components';
-import { Layout, Utterances } from '@components';
+import { Layout, Utterances, AnimatedSection } from '@components';
 import utterancesConfig from '@config/utterances';
 
 const StyledPostContainer = styled.main`
@@ -1027,29 +1027,40 @@ const PostTemplate = ({ data, location }) => {
 
       <StyledPostContainer>
         <StyledMainContent>
-          <StyledBreadcrumb>
-            <Link to="/pensieve">
-              <span className="arrow">&larr;</span>
-              All Memories
-            </Link>
-          </StyledBreadcrumb>
+          <AnimatedSection>
+            <StyledBreadcrumb>
+              <Link to="/pensieve">
+                <span className="arrow">&larr;</span>
+                All Memories
+              </Link>
+            </StyledBreadcrumb>
+          </AnimatedSection>
 
-          <StyledPostHeader>
-            <h1 className="medium-heading">{title}</h1>
-          </StyledPostHeader>
+          <AnimatedSection delay={200}>
+            <StyledPostHeader>
+              <h1 className="medium-heading">{title}</h1>
+            </StyledPostHeader>
+          </AnimatedSection>
 
-          <StyledPostContent className="post-content" dangerouslySetInnerHTML={{ __html: html }} />
+          <AnimatedSection delay={400}>
+            <StyledPostContent
+              className="post-content"
+              dangerouslySetInnerHTML={{ __html: html }}
+            />
+          </AnimatedSection>
 
-          {/* Comments Section */}
-          <Utterances
-            repo={utterancesConfig.repo}
-            issueTerm={utterancesConfig.issueTerm}
-            label={utterancesConfig.label}
-            theme={utterancesConfig.theme}
-          />
+          <AnimatedSection delay={600}>
+            {/* Comments Section */}
+            <Utterances
+              repo={utterancesConfig.repo}
+              issueTerm={utterancesConfig.issueTerm}
+              label={utterancesConfig.label}
+              theme={utterancesConfig.theme}
+            />
 
-          {/* Spacing above footer */}
-          <div style={{ marginBottom: '100px' }} />
+            {/* Spacing above footer */}
+            <div style={{ marginBottom: '100px' }} />
+          </AnimatedSection>
         </StyledMainContent>
 
         <StyledSidebar>
